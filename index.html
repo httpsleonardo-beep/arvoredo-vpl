@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101419"><meta name="color-scheme" content="dark">
+  <title>Arvoredo · Simulador de decisões</title>
+  <link rel="stylesheet" href="css/workspace.css">
+</head>
+<body>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><symbol id="ic-tree" viewBox="0 0 24 24"><path d="M5 12h5m0 0V5h7m-7 7v7h7"/><rect x="2" y="9" width="5" height="6" rx="1.2"/><circle cx="19" cy="5" r="2.3"/><path d="m17 21 2.2-4.3 2.3 4.3Z"/></symbol>
+<symbol id="ic-folder" viewBox="0 0 24 24"><path d="M3 6h6l2 2h10v11H3z"/></symbol>
+<symbol id="ic-save" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></symbol>
+<symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="ic-book" viewBox="0 0 24 24"><path d="M3 5q5-2 9 1 4-3 9-1v14q-5-2-9 1-4-3-9-1zM12 6v14"/></symbol>
+<symbol id="ic-sliders" viewBox="0 0 24 24"><path d="M3 7h5m4 0h9M3 17h10m4 0h4"/><circle cx="10" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></symbol>
+<symbol id="ic-undo" viewBox="0 0 24 24"><path d="m8 4-5 5 5 5M3 9h11a6 6 0 0 1 0 12"/></symbol>
+<symbol id="ic-redo" viewBox="0 0 24 24"><path d="m16 4 5 5-5 5m5-5h-11a6 6 0 0 0 0 12"/></symbol>
+<symbol id="ic-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+<symbol id="ic-expand" viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5m0 6v5h-5m-6 0H4v-5"/></symbol>
+<symbol id="ic-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5zm-9 10 9 5 9-5m-18 5 9 5 9-5"/></symbol>
+<symbol id="ic-bars" viewBox="0 0 24 24"><path d="M5 19V9m7 10V4m7 15v-7"/></symbol></defs></svg>
+<header class="mast">
+  <div class="mast-inner">
+    <div class="brand"><span class="brandmark"><svg class="glyph" aria-hidden="true"><use href="#ic-tree"></use></svg></span><b>Arvoredo</b></div>
+    <button class="library" id="library"><svg class="glyph" aria-hidden="true"><use href="#ic-book"></use></svg>Exercícios<svg class="glyph" aria-hidden="true"><use href="#ic-chevron"></use></svg></button>
+    <nav aria-label="Arquivos">
+      <button id="new" title="Nova árvore"><svg class="glyph" aria-hidden="true"><use href="#ic-plus"></use></svg><span>Nova árvore</span></button>
+      <button id="open" title="Abrir arquivo"><svg class="glyph" aria-hidden="true"><use href="#ic-folder"></use></svg><span>Abrir</span></button>
+      <button id="save" class="filled" title="Salvar projeto"><svg class="glyph" aria-hidden="true"><use href="#ic-save"></use></svg><span>Salvar projeto</span></button>
+    </nav>
+    <input type="file" id="upload" accept=".ods,.xlsm,.xlsx,.json,.csv" hidden>
+  </div>
+</header>
+<main>
+  <section class="heading"><div><h1 id="title"></h1><p id="summary"></p></div>
+    <div class="heading-actions"><button id="statement"><svg class="glyph" aria-hidden="true"><use href="#ic-book"></use></svg>Enunciado</button><button id="settings"><svg class="glyph" aria-hidden="true"><use href="#ic-sliders"></use></svg>Configurar</button></div>
+  </section>
+  <div class="workspace">
+    <section class="board" aria-labelledby="board-title">
+      <div class="board-head"><div class="section-title"><svg class="glyph" aria-hidden="true"><use href="#ic-tree"></use></svg><h2 id="board-title">Árvore de decisão</h2></div>
+        <div class="undo-group"><button id="undo" aria-label="Desfazer" title="Desfazer"><svg class="glyph" aria-hidden="true"><use href="#ic-undo"></use></svg></button><button id="redo" aria-label="Refazer" title="Refazer"><svg class="glyph" aria-hidden="true"><use href="#ic-redo"></use></svg></button></div>
+      </div>
+      <div class="canvas">
+        <div class="toolbar" aria-label="Inserir nós">
+          <span>Inserir</span>
+          <button draggable="true" data-template="DSN"><i class="shape D"></i>Decisão</button>
+          <button draggable="true" data-template="C"><i class="shape C"></i>Chance</button>
+          <button draggable="true" data-template="T"><i class="shape T"></i>Final</button>
+          <button id="cancel-tool" hidden>Cancelar</button>
+        </div>
+        <div id="viewport" tabindex="0" aria-label="Diagrama interativo"><div id="surface"><div id="scene"></div></div></div>
+      </div>
+      <div class="board-foot"><span class="legend"><i class="line-key"></i><span id="key">Estratégia recomendada</span></span>
+        <div class="zoom"><button id="out" aria-label="Diminuir zoom">−</button><output id="scale">100%</output><button id="in" aria-label="Aumentar zoom">+</button><button id="fit" title="Ajustar à tela" aria-label="Ajustar à tela"><svg class="glyph" aria-hidden="true"><use href="#ic-expand"></use></svg></button></div>
+      </div><p id="hint" role="status"></p>
+    </section>
+    <aside class="analysis" aria-labelledby="analysis-title">
+      <div class="section-title analysis-head"><svg class="glyph" aria-hidden="true"><use href="#ic-bars"></use></svg><h2 id="analysis-title">Resultado da árvore</h2></div>
+      <label class="profile-label" for="profile">Critério da empresa</label>
+      <select id="profile"><option value="ev">Maior VPL esperado</option><option value="spend">Menor desembolso esperado</option><option value="maximin">Proteger o pior resultado</option></select>
+      <div id="result" aria-live="polite"></div><button id="practice" class="full">Testar minha escolha →</button>
+    </aside>
+  </div>
+  <details class="detail"><summary><span class="section-title"><svg class="glyph" aria-hidden="true"><use href="#ic-layers"></use></svg><span>Análise dos caminhos</span></span><span class="summary-end"><span id="node-count"></span><svg class="glyph" aria-hidden="true"><use href="#ic-chevron"></use></svg></span></summary>
+    <div class="detail-body"><div class="tabs" aria-label="Detalhes do cálculo"><button data-tab="compare">Alternativas</button><button data-tab="outcomes">Cenários finais</button><button data-tab="math">Memória de cálculo</button></div><div id="detail-content"></div></div>
+  </details>
+</main>
+<dialog id="dialog" aria-labelledby="dialog-title"><div class="dialog-head"><h2 id="dialog-title"></h2><button id="close" aria-label="Fechar">×</button></div><div id="dialog-body"></div></dialog>
+<div id="notice" role="status"></div>
+<script src="vendor/jszip.min.js"></script><script src="js/format.js"></script><script src="js/model.js"></script><script src="js/engine.js"></script><script src="js/examples.js"></script><script src="js/io.js"></script><script src="js/app.js"></script>
+</body></html>
